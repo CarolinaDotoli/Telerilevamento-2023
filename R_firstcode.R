@@ -23,3 +23,18 @@ plot(l2011$B4_sre, col=cl)
 
 nir <- l2011[[4]] #or nr <- l2011$B4_sre
 plot(nir, col=cl)
+
+#Plot the nir band 
+# b1=blue
+# b2=green
+# b3=red
+# b4=NIR
+plot(l2011[[4]], col=cl)
+plot(l2011$B4_sre, col=cl)
+
+#dev.off () close the grapich
+
+#Export graphs in R
+pdf("myfirstgraph.pdf")
+plot(l2011$B4_sre, col=cl)
+dev.off()
