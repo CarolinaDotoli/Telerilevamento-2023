@@ -6,7 +6,7 @@ library(raster)
 #Import data, setting the working directory
  setwd("C:/Lab/") for Windows
 #Import data:
-l2011 <- brick("p224r63_2011_masked.grd")
+l2011 <- brick("p224r63_2011_masked.grd") #Brick function in used because there are different levels in the image
 
 #plotting the data
 plot(l2011)
@@ -39,8 +39,8 @@ dev.off()
 
 # Plotting several bands in a multiframe
 par(mfrow=c(2,1))
-plot(l2011[[3]], col=cl)
-plot(l2011[[4]], col=cl)
+plot(l2011[[3]], col=cl) #3 = RED
+plot(l2011[[4]], col=cl) #4 = NIR
 
 # Plotting the first 4 layers / bands
 # blue
@@ -58,11 +58,11 @@ plot(l2011$B2_sre, col=clg)
 plot(l2011$B3_sre, col=clr)
 plot(l2011$B4_sre, col=cln)
 
-# RGB plotting
-plotRGB(l2011, r=3, g=2, b=1, stretch="Lin")
-plotRGB(l2011, r=4, g=3, b=2, stretch="Lin")
-plotRGB(l2011, r=3, g=4, b=2, stretch="Lin")
-plotRGB(l2011, r=3, g=2, b=4, stretch="Lin")
+# RGB plotting, plot of multi-layered raster object
+plotRGB(l2011, r=3, g=2, b=1, stretch="Lin") #Natural colors
+plotRGB(l2011, r=4, g=3, b=2, stretch="Lin") #Vegetatiotion is red
+plotRGB(l2011, r=3, g=4, b=2, stretch="Lin") #Vegetation is blue 
+plotRGB(l2011, r=3, g=2, b=4, stretch="Lin") #Vegetation is green
 
 # Multiframe with natural and false colours
 par(mfrow=c(2,1))
