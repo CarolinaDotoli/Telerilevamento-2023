@@ -51,6 +51,10 @@ par(mfrow=c(2,2))
 plotRGB(Dadia22, 3,2,1, stretch="lin")
 plotRGB(Dadia22, 4,3,2, stretch="lin")
 
+#Esportiamo l'immagine 
+setwd("C:/Grecia/")
+pdf("Dadia_22.pdf")
+
 #Banda 4= NIR 
 #Banda 3= Rosso
 #Banda 2= Verde
@@ -79,6 +83,9 @@ Dadia_07_23 <- crop(sen_07_23, ext)
 par(mfrow=c(1,2))
 plotRGB(Dadia_07_23, 3,2,1, stretch="lin")
 plotRGB(Dadia_07_23, 4,3,2, streth="lin")
+
+#Esportiamo l'immagine 
+pdf("Dadia_incendio23.pdf")
 dev.off()
                             
                               
@@ -101,14 +108,65 @@ sen_08_23 <- stack(import_08_23)
 ext <- c(399960, 463760, 4520220, 4590020 )
 Dadia_08_23 <- crop(sen_08_23, ext)
 
-#Compariamo prima e post incendio 
+#Compariamo le immagini con colori naturali e colori falsi 
 par(mfrow=c(1,2))
 plotRGB(Dadia_08_23, 3,2,1, stretch="Lin")
 plotRGB(Dadia_08_23, 4,3,2, stretch="Lin")
 
+#Visualizziamo con un plot a colori naturali la foresta di Dadia nel 2022, a luglio del 2023 e dopo l'incendio
+par(mfrow=c(1,3))
+plotRGB(Dadia22, 3,2,1, stretch="lin")
+plotRGB(Dadia_07_23, 3,2,1, stretch = "lin")
+plotRGB(Dadia_08_23, 3,2,1, stretch = "lin")
 
-  
+#Esportiamo l'immagine 
+pdf("Comparazione Dadia.pdf")
+dev.off()
 
 ###CALCOLO DVI (difference vegetation index) è un indice utilizzato per quantificare la 
 ##vegetazione verde attraverso la sottrazione NIR - RED e per quantificarne il suo stato di 
 ##salute 
+
+#Calcolo DVI per i diversi anni
+DVI22 <- Dadia22$T35TMF_20220714T090559_B08_10m - Dadia22$T35TMF_20220714T090559_B04_10m      #il layer 4 corrisponde al NIR, quello 3 al rosso
+DVI23 <- Dadia_07_23$T35TMF_20230729T090559_B08_10m - Dadia_07_23$T35TMF_20230729T090559_B04_10m
+DVIincendio23 <- Dadia_08_23$T35TMF_20230828T090559_B08_10m - Dadia_08_23$T35TMF_20230828T090559_B04_10m
+
+
+#Creiamo una palette di colori per visualizzare la DVI
+clDVI <- colorRampPalette(c("chocolate3","khaki2", "olivedrab", "forestgreen")) (100)
+
+#MARRONCINO: vegetazione assente
+#OCRA: vegetazione presente
+#VERDE: vegetazione sana
+
+#Plottiamo la DVI per i 3 anni 
+par(mfrow=c(1,3))
+plot(DVI22, col=clDVI, main = "DVI nel 2022")
+plot(DVI23, col=clDVI, main = "DVI nel 2023")
+plot(DVIincendio23, col=clDVI, main="DVI post incendio 2023")
+
+#Esportiamo l'immagine 
+pdf("DVI.pdf")
+dev.off()
+
+#Commento: Già dalla DVI si evidenzia un grande aumento di aree caratterizzate da assenza di vegetazione localizzate nel parco nazionale di Dadia a seguito dell'
+#incendio di fine Agosto del 2023; si evince anche che sebbene il focolaio principale sia localizzato all'interno del parco la diffusione è stata estremmamente vasta
+
+#Calcolo la NDVI (ovvero la normalized difference vegetation index), ovvero una DVI normalizzata, con valori 
+#che sono compresi tra 0 e 1 per visualizzare al meglio la comparazione tra i diversi anni
+#NDVI = DVI / (NIR + RED)
+
+NDVI22 <- DVI22 / (Dadia22$T35TMF_20220714T090559_B08_10m + Dadia22$T35TMF_20220714T090559_B04_10m)
+NDVI23pre <- DVI23 / (Dadia_07_23$T35TMF_20230729T090559_B08_10m + Dadia_07_23$T35TMF_20230729T090559_B04_10m)
+NDVI23post <- DVIincendio23 / (Dadia_08_23$T35TMF_20230828T090559_B08_10m + Dadia_08_23$T35TMF_20230828T090559_B04_10m)
+
+#Plottiamo le tre immagini con la NDVI
+par(mfrow=c(1,3))
+plot(NDVI22, col=clDVI, main ="NDVI nel 2022")
+plot(NDVI23pre, col=clDVI, main ="NDVI nel 2023")
+plot(NDVI23post, col=clDVI, main = "NDVI post incendio 2023")
+
+#Indici negativi indicano acqua o suolo nudo
+#Valori compresi tra 0.2-0.5 indicano la presenza di aree agricole o vegetazione malsana 
+#Valori superiori a 0.5 indicano una vegetazione sana
