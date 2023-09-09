@@ -140,7 +140,7 @@ sen_2320m <- brick(import_2320m)
 #Ritagliamo l'area di studio sul parco Nazionale delle foreste di Dadia, 
 #Posto al confine con la Turchia
 #Tagliamo l'area di studio
-ext <- c(379700, 429900, 4523600, 4549900 )
+ext <- c(379700, 439900, 4522600, 4559000 )
 Dadia_2320m <- crop(sen_2320m, ext)
 Dadia_2320m
 
