@@ -123,6 +123,35 @@ plotRGB(Dadia_08_23, 3,2,1, stretch = "lin")
 pdf("Comparazione Dadia.pdf")
 dev.off()
 
+#Per visualizzare al meglio l'area dell'incendio importiamo le immagini dell'incendio ad una risoluzione di 20m
+#Impostiamo la working directory 
+setwd("C:/Grecia/Dadia_28Agosto")
+
+
+#Creiamo una lista con le bande che vogliamo importare 
+list_Dadia2320m <- list.files(pattern = "T35TLF_20230828T090559_B")
+
+#Applichiamo la funzione raster a tutte le bande della lista 
+import_2320m <- lapply(list_Dadia2320m, raster)
+
+##Uniamo tutte le bande in un'unica immagine 
+sen_2320m <- brick(import_2320m)
+
+#Ritagliamo l'area di studio sul parco Nazionale delle foreste di Dadia, 
+#Posto al confine con la Turchia
+#Tagliamo l'area di studio
+ext <- c(379700, 429900, 4523600, 4549900 )
+Dadia_2320m <- crop(sen_2320m, ext)
+Dadia_2320m
+
+
+dev.off()
+par(mfrow=c(1,3))
+plotRGB(Dadia_2320m, 5,6, 3, stretch="lin" )
+plotRGB(Dadia_2320m, 3,2,1, stretch="lin", main = "colori naturali")
+plotRGB(Dadia_2320m, 6,3,2, stretch="lin", main = "falsi colori")
+
+
 ###CALCOLO DVI (difference vegetation index) è un indice utilizzato per quantificare la 
 ##vegetazione verde attraverso la sottrazione NIR - RED e per quantificarne il suo stato di 
 ##salute 
