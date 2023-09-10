@@ -75,7 +75,7 @@ dev.off()
 
 
                          #Importiamo le immagini durante l'incendio (28 Agosto 2023)#
-setwd("C:/Exam/Dadia_post")
+setwd("C:/Exam/Dadia_during")
 
 #Creiamo una lista 
 list_post <- list.files(pattern="T35TLF_20230902T090601_B")
@@ -172,3 +172,88 @@ plot(difNDVI_tot, col=cldiff, main = "Differenza totale NDVI tra il 2022 e 2023 
 
 
 
+#3. CLASSIFICAZIONE #
+# Analizziamo la percentuale di copertura vegetale nel corso del tempo 
+
+#Inizio con l'immagine del 2022#
+#Estrazione valori dall'immagine 
+single_nr_22 <- getValues(Dadia_22)
+single_nr_22
+
+#Applichiamo la funzione kmeans che serve per dividere in gruppi omogenei i dati estratti in precedenza
+kcluster22 <- kmeans(single_nr_22, centers = 2)
+
+#Set dei valori 
+Dadia_22_class <- setValues(Dadia_22[[1]], kcluster22$cluster )
+
+#Carichiamo una palette con 2 colori per distinguere aree verdi da suolo nudo 
+clclass <- colorRampPalette(c("yellow4", "darkorchid4")) (100)
+plot(Dadia_22_class, col=clclass)
+
+#CLASSE 1: SUOLO NUDO 
+#CLASSE 2: VEGETAZIONE PRESENTE 
+
+#Calcoliamo le frequenze
+freq_22 <- freq(Dadia_22_class)
+freq_22
+
+#Calcoliamo il totale del numero di celle di pixel per fare poi la percentuale
+total <- ncell(Dadia_22)
+
+#Calcoliamo la percentuale 
+perc_22 <- freq_22 * 100 / total
+perc_22
+
+#Nel 2022 abbiamo quindi: 
+#Suolo nudo: 36%
+#Vegetazione: 64%
+
+
+#Ripetiamo questa operazione di classificazione anche per gli altri anni 
+#2023 pre incendio#
+
+#Estrazione dei valori
+single_nr_pre <- getValues(Dadia_pre)
+
+#Utilizziamo la funzione kmeans 
+kcluster_pre <- kmeans (single_nr_pre, centers = 2)
+
+#set dei valori 
+Dadia_pre_class <- setValues(Dadia_pre[[1]], kcluster_pre$cluster)
+
+#Calcoliamo la frequenza 
+freq_pre <- freq(Dadia_pre_class)
+perc_pre <- freq_pre * 100 / total
+perc_pre
+
+
+#2023 post incendio#
+
+#Estrazione dei valori
+single_nr_post <- getValues(Dadia_post)
+
+#Utilizziamo la funzione kmeans 
+kcluster_post <- kmeans (single_nr_post, centers = 3)
+
+#set dei valori 
+Dadia_post_class <- setValues(Dadia_post[[1]], kcluster_post$cluster)
+
+#Calcoliamo la frequenza 
+freq_post <- freq(Dadia_post_class)
+perc_post <- freq_post * 100 / total
+perc_post
+
+#Plottiamo le tre immagini affiancate 
+#Alla terza immagine post incendio è stata aggiunta una classe (ovvero quella dell'area bruciata )
+#Dunque è necessario modificare l'ordine di colori della palette per permettere una perfetta conincidenza 
+#con le immagini precedenti 
+par(mfrow=c(1,2))
+plotRGB(Dadia_post, 3,2,1, stretch="lin")
+clclass3 <- colorRampPalette(c())
+clclass3 <- colorRampPalette(c("darkred", "darkorchid4", "yellow4")) (100)
+plot(Dadia_post_class, col=clclass3, main ="Classificazione post incendio")
+
+par(mfrow=c(1,3))
+plot(Dadia_22_class, col=clclass, main = "Classificazione 2022")
+plot(Dadia_pre_class, col=clclass, main ="Classificazione pre incendio")
+plot(Dadia_post_class, col=clclass3, main ="Classificazione post incendio")
