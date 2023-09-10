@@ -257,3 +257,41 @@ par(mfrow=c(1,3))
 plot(Dadia_22_class, col=clclass, main = "Classificazione 2022")
 plot(Dadia_pre_class, col=clclass, main ="Classificazione pre incendio")
 plot(Dadia_post_class, col=clclass3, main ="Classificazione post incendio")
+
+#Le aree gialle rappresentano la porzione di suolo nudo
+#Le aree rosse indicano la porzione con vegetazione 
+#Le aree viola indicano il territorio colpito dall'incendio
+
+#Creiamo dunque un grafico con le percentuali ottenute per mostrare la percentuale di copertura del suolo per i diversi anni
+#Iniziamo dal 2023
+#Creiamo un data frame con le informazioni che ci interessano 
+cover <- c("Suolo nudo", "Vegetazione", "Terreno bruciato")
+percent_22 <- c(35.91, 64.09, 00)
+percent_pre <- c(35.19, 64.81, 00)
+percent_post <- c(30.95, 36.09, 32.96)
+
+percentages <- data.frame(cover, percent_22, percent_pre, percent_post)
+percentages
+
+#Creiamo un grafico a barre con i valori del 2022
+Percent_22_g <- ggplot(percentages, aes(x=cover, y=percent_22, fill=cover)) + geom_bar(position = "stack", stat = "identity")+
+  labs(title = "Percentuale di Copertura del Suolo per l'Anno 2022",
+       x = "Copertura suolo", y = "Percentuale") + geom_text(aes(label =paste(round(percent22,2), "%"), vjust = -0.5)) + ylim(c(0,100))
+
+#2023 pre incendio
+Percent_pre_g <- ggplot(percentages, aes(x=cover, y=percent_pre, fill=cover)) + geom_bar(position = "stack", stat = "identity")+
+  labs(title = "Percentuale di Copertura del Suolo nel 2023 (pre incendio)",
+       x = "Copertura suolo", y = "Percentuale") + geom_text(aes(label =paste(round(percent_pre,2), "%"), vjust = -0.5))+ ylim(c(0,100))
+
+#2023 post incendio
+Percent_post_g<- ggplot(percentages, aes(x=cover, y=percent_post, fill=cover)) + geom_bar(position = "stack", stat = "identity")+
+  labs(title = "Percentuale di Copertura del Suolo nel 2023 (post incendio)",
+       x = "Copertura suolo", y = "Percentuale") + geom_text(aes(label =paste(round(percent_post,2), "%"), vjust = -0.5)) + ylim(c(0,100))
+
+#Andiamo ad affiancare i tre grafici creati grazie alla libreria "patchwork"
+Percent_22_g + Percent_pre_g + Percent_post_g
+
+#Esportiamo il grafico 
+pdf(Grafico_coperturasuolo.pdf)
+dev.off()
+
