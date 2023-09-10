@@ -152,6 +152,7 @@ plotRGB(Dadia_2320m, 3,2,1, stretch="lin", main = "colori naturali")
 plotRGB(Dadia_2320m, 6,3,2, stretch="lin", main = "falsi colori")
 
 
+#2. CALCOLO DVI E NDVI
 ###CALCOLO DVI (difference vegetation index) è un indice utilizzato per quantificare la 
 ##vegetazione verde attraverso la sottrazione NIR - RED e per quantificarne il suo stato di 
 ##salute 
@@ -199,3 +200,25 @@ plot(NDVI23post, col=clDVI, main = "NDVI post incendio 2023")
 #Indici negativi indicano acqua o suolo nudo
 #Valori compresi tra 0.2-0.5 indicano la presenza di aree agricole o vegetazione malsana 
 #Valori superiori a 0.5 indicano una vegetazione sana
+
+#Visualizziamo ora la differenza di NDVI tra i diversi anni per poter derterminare se vi è stato un aumento 
+#o una diminuzione tra il 2022 ed il 2023, oltre che per verificare i danni dell'incendio 
+#Analizziamo prima la differenza tra il 2022 ed il 2023 
+difNDVI_norm <- NDVI22 - NDVIpre
+difNDVI_incendio <- NDVIpre - NDVIpost
+difNDVI_tot <- NDVI22 - NDVIpost
+
+#Creiamo una palette di colori per visualizzare la differenza di NDVI
+cldiff <- colorRampPalette(c("seagreen4", "mediumseagreen", "white", "lightpink", "deeppink3")) (100)
+
+par(mfrow=c(1,3))
+plot(difNDVI_norm, col=cldiff, main ="Differenza NDVI tra il 2022 e 2023")
+plot(difNDVI_incendio, col=cldiff, main = "Differenza di NDVI dovuta all'incendio")
+plot(difNDVI_tot, col=cldiff, main = "Differenza totale NDVI tra il 2022 e 2023 post incendio")
+
+#Le aree verdi indicano che c'è stato un incremento nella vegetazione dall'immagine precedente usata per il confronto
+#Le aree bianche indicano assenza di variazione della NDVI 
+#Le aree rosa indicano una diminuzione della componente vegetale
+
+
+#3. CLASSIFICAZIONE 
