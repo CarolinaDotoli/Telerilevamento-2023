@@ -1,12 +1,11 @@
                                                                         #PROGETTO TELERILEVAMENTO 2023#
 
-#Analisi dell'incendio in Grecia avvenuto nel 2023 a fine Agosto, in particolar modo concentrandoci sulla foresta di Dadia (Parco Nazionale); per analizzare i danni causati dall'incendio e comparare anche nel 
-#corso del 2023 il benessere e la copertura vegetale della foresta. 
+#Analisi dell'incendio in Grecia avvenuto nel 2023 a fine Agosto, in particolar modo concentrandoci sull'area della foresta di Dadia (Parco Nazionale); 
+#per analizzare i danni causati dall'incendio e comparare anche nel corso del 2023 il benessere e la copertura vegetale della foresta rispetto all'anno precendete. 
 
 #Carichiamo le librerire necessarie
 library(raster) #Serve per aprire i dati raster 
 library(ggplot2) #Per creare dei plot migliori  
-library(viridis) #Per creare delle palette di colori gradutate per facilitare la lettura dei grafici a persone con deficit visivi
 library(patchwork) #Per affiancare due grafici fatti con ggplot
 
 
@@ -15,8 +14,7 @@ library(patchwork) #Per affiancare due grafici fatti con ggplot
 #Iniziamo con l'importazione delle immagini sentinel
 
 
-
-                             #Iniziamo ad importare le immmagini del 2022#
+                                             #IMMAGINI 2022#
 #Impostiamo la working directory sulla cartella dell'esame 
 setwd("C:/Exam/Dadia2022")
 
@@ -32,6 +30,8 @@ sen_22 <- brick(import_22)
 #Ritagliamo l'area studio 
 ext <- c(379700, 429900, 4523600, 4549900)
 Dadia_22 <- crop(sen_22, ext)
+
+#Visualizziamo le informazioni dell'immagine 
 Dadia_22
 
 #BANDA 2: blu 
@@ -46,8 +46,14 @@ plotRGB(Dadia_22, 4,3,2, stretch="lin")
 plotRGB(Dadia_22, 7,3,2, stretch="lin" )
 plotRGB(Dadia_22, 6,7, 4, stretch="lin")
 
-              
-                            #Carichiamo immagini pre incendio (inizio agosto 2023)#
+#Esportiamo l'immagine 
+pdf("Dadia_22.pdf")
+dev.off()
+
+
+
+                                         #PRE INCENDIO (8 AGOSTO 2023)#
+#Impostiamo la working directory
 setwd("C:/Exam/Dadia_pre")
 
 #Creiamo una lista 
@@ -62,6 +68,15 @@ sen_pre <- brick(import_pre)
 #tagliamo l'immagine 
 Dadia_pre <- crop(sen_pre, ext)
 
+#Visualizziamo le informazioni 
+Dadia_pre
+
+#BANDA 2: blu 
+#BAMDA 3: verde
+#BANDA 4: rosso 
+#BANDA 6: SWIR
+#BANDA 7: NIR
+
 #Plottiamo con colori naturali, NIR e SWIR
 par(mfrow=c(1,3))
 plotRGB(Dadia_pre, 4,3,2, stretch="lin")
@@ -74,7 +89,8 @@ dev.off()
 
 
 
-                         #Importiamo le immagini durante l'incendio (28 Agosto 2023)#
+                                        #POST INCENDIO (29 AGOSTO 2023)#
+#Importiamo la working directory
 setwd("C:/Exam/Dadia_during")
 
 #Creiamo una lista 
@@ -88,7 +104,15 @@ sen_post <- brick(import_post)
 
 #tagliamo l'immagine 
 Dadia_post <- crop(sen_post, ext)
+
+#Visualizziamo le informazioni dell'immagine
 Dadia_post
+
+#BANDA 1: blu 
+#BAMDA 2: verde
+#BANDA 3: rosso 
+#BANDA 5: SWIR
+#BANDA 6: NIR
 
 #Plottiamo con colori naturali, NIR e SWIR
 #N.B: Qui manca il livello 1, quindi le bande sono sfalsate 
@@ -102,14 +126,15 @@ pdf("Dadia_during.pdf")
 dev.off()
 
 
-#2. CALCOLO DELLA DVI E NDVI#
+#2. CALCOLO DELLA DVI E NDVI
+
 #CALCOLO DVI
 DVI22 <- Dadia_22[[7]] - Dadia_22[[4]] #7= Banda NIR; #4=Banda rosso. 
 DVIpre <- Dadia_pre[[7]] - Dadia_pre [[4]]
 DVIpost <- Dadia_post[[6]] - Dadia_post[[3]] #Manca la banda 1 quindi i colori sono sfalsati 
 
 #Creiamo una palette di colori per visualizzare la DVI
-clDVI <- colorRampPalette(c("chocolate3","khaki2", "olivedrab", "forestgreen")) (100)
+clDVI <- colorRampPalette(c("blue4", "aquamarine3", "antiquewhite", "darkred")) (100)
 
 
 par(mfrow=c(1,3))
@@ -117,9 +142,10 @@ plot(DVI22, col=clDVI, main="DVI nel 2022")
 plot(DVIpre, col=clDVI, main="DVI nel 2023 (pre incendio)")
 plot(DVIpost, col=clDVI, main="DVI nel 2023 (post incendio)")
 
-#MARRONCINO: vegetazione assente
-#OCRA: vegetazione presente
-#VERDE: vegetazione sana
+#Blu: vegetazione assente 
+#Azzurro: vegetazione scarsa 
+#giallo: vegetazione presente 
+#rosso scuro: vegetazione ottimale 
 
 #Commento: Già dalla DVI si evidenzia un grande aumento di aree caratterizzate da assenza di vegetazione localizzate nel parco nazionale di Dadia a seguito dell'
 #incendio di fine Agosto del 2023; si evince anche che sebbene il focolaio principale sia localizzato all'interno del parco la diffusione è stata estremmamente vasta
@@ -129,15 +155,19 @@ plot(DVIpost, col=clDVI, main="DVI nel 2023 (post incendio)")
 #che sono compresi tra 0 e 1 per visualizzare al meglio la comparazione tra i diversi anni
 #NDVI = DVI / (NIR + RED)
 #NDVI 
+
+#Creiamo una palette di colori per visualizzare al meglio la NDVI
+clNDVI <- colorRampPalette(c("chocolate3","khaki2", "olivedrab", "forestgreen")) (100)
+
 NDVI22 <- DVI22 / (Dadia_22[[7]] + Dadia_22[[4]])
 NDVIpre <- DVIpre / (Dadia_pre[[7]] + Dadia_pre[[4]])
 NDVIpost <- DVIpost / (Dadia_post[[6]] + Dadia_post[[3]])
 
 #Plottiamo le tre immagini con la NDVI
 par(mfrow=c(1,3))
-plot(NDVI22, col=clDVI, main = "NDVI nel 2022")
-plot(NDVIpre, col=clDVI, main = "NDVI nel 2023 (pre incendio)")
-plot(NDVIpost, col=clDVI, main = "NDVI nel 2023 (post incendio)")
+plot(NDVI22, col=clNDVI, main = "NDVI nel 2022")
+plot(NDVIpre, col=clNDVI, main = "NDVI nel 2023 (pre incendio)")
+plot(NDVIpost, col=clNDVI, main = "NDVI nel 2023 (post incendio)")
 dev.off()
 
 #MARRONCINO: vegetazione assente
@@ -247,10 +277,10 @@ perc_post
 #Alla terza immagine post incendio è stata aggiunta una classe (ovvero quella dell'area bruciata )
 #Dunque è necessario modificare l'ordine di colori della palette per permettere una perfetta conincidenza 
 #con le immagini precedenti 
+clclass3 <- colorRampPalette(c("darkred", "darkorchid4", "yellow4")) (100)
+
 par(mfrow=c(1,2))
 plotRGB(Dadia_post, 3,2,1, stretch="lin")
-clclass3 <- colorRampPalette(c())
-clclass3 <- colorRampPalette(c("darkred", "darkorchid4", "yellow4")) (100)
 plot(Dadia_post_class, col=clclass3, main ="Classificazione post incendio")
 
 par(mfrow=c(1,3))
