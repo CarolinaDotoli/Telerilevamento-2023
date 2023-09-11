@@ -1,4 +1,4 @@
-#PROGETTO TELERILEVAMENTO 2023#
+                                                     #PROGETTO TELERILEVAMENTO 2023#
 
 #Analisi dell'incendio in Grecia avvenuto nel 2023 a fine Agosto, in particolar modo concentrandoci sulla foresta di Dadia (Parco Nazionale); per analizzare i danni causati dall'incendio e comparare anche nel 
 #corso del 2023 il benessere e la copertura vegetale della foresta dal 2022 al 2023. 
@@ -13,9 +13,7 @@ library(patchwork) #Per affiancare due grafici fatti con ggplot
 #1. CARICAMENTO E VISUALIZZAZIONE DELLE IMMAGINI
 #Iniziamo con l'importazione delle immagini sentinel
 
-
-
-#Iniziamo ad importare le immmagini del 2022#
+                                                       #IMMAGINI 2022#
 #Impostiamo la working directory sulla cartella dell'esame 
 setwd("C:/Exam/Dadia2022")
 
@@ -50,8 +48,8 @@ plotRGB(Dadia_22, 7,3,2, stretch="lin" )
 pdf("Dadia_22.pdf")
 dev.off ()
 
-
-#Carichiamo immagini pre incendio (inizio agosto 2023)#
+ 
+                                                  #IMMAGINI 3 AGOSTO 2023#
 #Impostiamo la working directory
 setwd("C:/Exam/Dadia_pre")
 
@@ -88,7 +86,8 @@ dev.off()
 
 
 
-#Importiamo le immagini durante l'incendio (28 Agosto 2023)#
+                                                     #IMMAGINI 28 AGOSTO 2023#
+#Impostiamo la working directory
 setwd("C:/Exam/Dadia_during")
 
 #Creiamo una lista 
@@ -146,7 +145,9 @@ dev.off()
 
 #2. CALCOLO DELLA DVI E NDVI
 
-#CALCOLO DVI
+
+#CALCOLO DVI 
+#DVI = NIR - RED
 DVI22 <- Dadia_22[[7]] - Dadia_22[[4]] #7= Banda NIR; #4=Banda rosso. 
 DVIpre <- Dadia_pre[[7]] - Dadia_pre [[4]]
 DVIpost <- Dadia_post[[6]] - Dadia_post[[3]] #Manca la banda 1 quindi i colori sono sfalsati 
@@ -154,7 +155,7 @@ DVIpost <- Dadia_post[[6]] - Dadia_post[[3]] #Manca la banda 1 quindi i colori s
 #Creiamo una palette di colori per visualizzare la DVI
 clDVI <- colorRampPalette(c("blue4", "aquamarine3", "antiquewhite", "darkred")) (100)
 
-
+#Plottiamo le immagini della DVI
 par(mfrow=c(1,3))
 plot(DVI22, col=clDVI, main="DVI nel 2022")
 plot(DVIpre, col=clDVI, main="DVI nel 2023 (pre incendio)")
@@ -174,12 +175,13 @@ plot(DVIpost, col=clDVI, main="DVI nel 2023 (post incendio)")
 #NDVI = DVI / (NIR + RED)
 #NDVI 
 
-#Creiamo una palette di colori per visualizzare al meglio la NDVI
-clNDVI <- colorRampPalette(c("chocolate3","khaki2", "olivedrab", "forestgreen")) (100)
-
 NDVI22 <- DVI22 / (Dadia_22[[7]] + Dadia_22[[4]])
 NDVIpre <- DVIpre / (Dadia_pre[[7]] + Dadia_pre[[4]])
 NDVIpost <- DVIpost / (Dadia_post[[6]] + Dadia_post[[3]])
+
+
+#Creiamo una palette di colori per visualizzare al meglio la NDVI
+clNDVI <- colorRampPalette(c("chocolate3","khaki2", "olivedrab", "forestgreen")) (100)
 
 #Plottiamo le tre immagini con la NDVI
 par(mfrow=c(1,3))
@@ -209,9 +211,16 @@ difNDVI_tot <- NDVI22 - NDVIpost
 #Creiamo una palette di colori per visualizzare la differenza di NDVI
 cldiff <- colorRampPalette(c("seagreen4", "mediumseagreen", "white", "lightpink", "deeppink3")) (100)
 
-par(mfrow=c(1,3))
+#Compariamo le immagini della differenza tra il 2022 e il 2023 ed i danni subiti dall'incendio
+par(mfrow=c(1,2))
 plot(difNDVI_norm, col=cldiff, main ="Differenza NDVI tra il 2022 e 2023")
 plot(difNDVI_incendio, col=cldiff, main = "Differenza di NDVI dovuta all'incendio")
+
+#Esportiamo l'immagine 
+pdf("Differenza_NDVI")
+dev.off ()
+
+#Mostriamo ora l'immagine della differenza totale, ovvero dal 2022 alla situazione post incendio
 plot(difNDVI_tot, col=cldiff, main = "Differenza totale NDVI tra il 2022 e 2023 post incendio")
 
 #Le aree verdi indicano che c'è stato un incremento nella vegetazione dall'immagine precedente usata per il confronto
