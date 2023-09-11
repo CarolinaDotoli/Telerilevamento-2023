@@ -1,7 +1,7 @@
-                                                                        #PROGETTO TELERILEVAMENTO 2023#
+#PROGETTO TELERILEVAMENTO 2023#
 
-#Analisi dell'incendio in Grecia avvenuto nel 2023 a fine Agosto, in particolar modo concentrandoci sull'area della foresta di Dadia (Parco Nazionale); 
-#per analizzare i danni causati dall'incendio e comparare anche nel corso del 2023 il benessere e la copertura vegetale della foresta rispetto all'anno precendete. 
+#Analisi dell'incendio in Grecia avvenuto nel 2023 a fine Agosto, in particolar modo concentrandoci sulla foresta di Dadia (Parco Nazionale); per analizzare i danni causati dall'incendio e comparare anche nel 
+#corso del 2023 il benessere e la copertura vegetale della foresta dal 2022 al 2023. 
 
 #Carichiamo le librerire necessarie
 library(raster) #Serve per aprire i dati raster 
@@ -14,7 +14,8 @@ library(patchwork) #Per affiancare due grafici fatti con ggplot
 #Iniziamo con l'importazione delle immagini sentinel
 
 
-                                             #IMMAGINI 2022#
+
+#Iniziamo ad importare le immmagini del 2022#
 #Impostiamo la working directory sulla cartella dell'esame 
 setwd("C:/Exam/Dadia2022")
 
@@ -31,7 +32,7 @@ sen_22 <- brick(import_22)
 ext <- c(379700, 429900, 4523600, 4549900)
 Dadia_22 <- crop(sen_22, ext)
 
-#Visualizziamo le informazioni dell'immagine 
+#Visualizziamo le informazioni
 Dadia_22
 
 #BANDA 2: blu 
@@ -40,19 +41,17 @@ Dadia_22
 #BANDA 6: SWIR
 #BANDA 7: NIR
 
-#Plottiamo con colori naturali, NIR e SWIR
-par(mfrow=c(1,3))
+#Plottiamo con colori naturali e NIR 
+par(mfrow=c(1,2))
 plotRGB(Dadia_22, 4,3,2, stretch="lin")
 plotRGB(Dadia_22, 7,3,2, stretch="lin" )
-plotRGB(Dadia_22, 6,7, 4, stretch="lin")
 
 #Esportiamo l'immagine 
 pdf("Dadia_22.pdf")
-dev.off()
+dev.off ()
 
 
-
-                                         #PRE INCENDIO (8 AGOSTO 2023)#
+#Carichiamo immagini pre incendio (inizio agosto 2023)#
 #Impostiamo la working directory
 setwd("C:/Exam/Dadia_pre")
 
@@ -77,11 +76,11 @@ Dadia_pre
 #BANDA 6: SWIR
 #BANDA 7: NIR
 
-#Plottiamo con colori naturali, NIR e SWIR
-par(mfrow=c(1,3))
+#Plottiamo con colori naturali e falsi colori
+par(mfrow=c(1,2))
 plotRGB(Dadia_pre, 4,3,2, stretch="lin")
 plotRGB(Dadia_pre, 7,3,2, stretch="lin" )
-plotRGB(Dadia_pre, 6,7, 4, stretch="lin")
+
 
 #esportiamo il grafico 
 pdf("Dadia_pre.pdf")
@@ -89,12 +88,11 @@ dev.off()
 
 
 
-                                        #POST INCENDIO (29 AGOSTO 2023)#
-#Importiamo la working directory
+#Importiamo le immagini durante l'incendio (28 Agosto 2023)#
 setwd("C:/Exam/Dadia_during")
 
 #Creiamo una lista 
-list_post <- list.files(pattern="T35TLF_20230902T090601_B")
+list_post <- list.files(pattern="T35TLF_20230828T090559_B")
 
 #Applichiamo la funzione raster 
 import_post <- lapply(list_post, raster)
@@ -105,26 +103,39 @@ sen_post <- brick(import_post)
 #tagliamo l'immagine 
 Dadia_post <- crop(sen_post, ext)
 
-#Visualizziamo le informazioni dell'immagine
+#Visualizziamo le informazioni
 Dadia_post
 
-#BANDA 1: blu 
-#BAMDA 2: verde
-#BANDA 3: rosso 
-#BANDA 5: SWIR
+#BANDA 1: BLU
+#BANDA 2: VERDE 
+#BANDA 3: ROSSA 
+#BANDA 5: SWIR 
 #BANDA 6: NIR
 
-#Plottiamo con colori naturali, NIR e SWIR
+#Plottiamo con colori naturali e falsi colori
 #N.B: Qui manca il livello 1, quindi le bande sono sfalsate 
-par(mfrow=c(1,3))
+par(mfrow=c(1,2))
 plotRGB(Dadia_post, 3,2,1, stretch="lin")
 plotRGB(Dadia_post, 6,2,1, stretch="lin" )
-plotRGB(Dadia_post, 5,6, 3, stretch="lin")
+
 
 #esportiamo il grafico 
-pdf("Dadia_during.pdf")
+pdf("Dadia_post.pdf")
 dev.off()
 
+
+#Analizziamo ora le immagini in RGB però inserendo sulla banda del rosso lo SWIR, ovvero l'infrarosso 
+#medio, in grado di calcolare la temperatura in superifice per poter determinare l'estensione dell'area 
+#dell'incendio; sulla banda del verde invece è posto l'infrarosso vicino (NIR), per poter determinare la presenza
+#di piante 
+
+par(mfrow=c(1,3))
+plotRGB(Dadia_22, 6,7, 4, stretch="lin")
+plotRGB(Dadia_pre, 6,7, 4, stretch="lin")
+plotRGB(Dadia_post, 5,6, 3, stretch="lin")
+
+#Esportiamo l'immagine 
+pdf("Dadia_SWIR.pdf")
 
 #2. CALCOLO DELLA DVI E NDVI
 
