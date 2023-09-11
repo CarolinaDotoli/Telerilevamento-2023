@@ -136,6 +136,13 @@ plotRGB(Dadia_post, 5,6, 3, stretch="lin")
 
 #Esportiamo l'immagine 
 pdf("Dadia_SWIR.pdf")
+dev.off()
+
+
+
+
+
+
 
 #2. CALCOLO DELLA DVI E NDVI
 
