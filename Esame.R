@@ -229,7 +229,7 @@ plot(difNDVI_tot, col=cldiff, main = "Differenza totale NDVI tra il 2022 e 2023 
 
 
 
-#3. CLASSIFICAZIONE #
+#3. CLASSIFICAZIONE 
 # Analizziamo la percentuale di copertura vegetale nel corso del tempo 
 
 #Inizio con l'immagine del 2022#
@@ -243,12 +243,9 @@ kcluster22 <- kmeans(single_nr_22, centers = 2)
 #Set dei valori 
 Dadia_22_class <- setValues(Dadia_22[[1]], kcluster22$cluster )
 
-#Carichiamo una palette con 2 colori per distinguere aree verdi da suolo nudo 
-clclass <- colorRampPalette(c("yellow4", "darkorchid4")) (100)
-plot(Dadia_22_class, col=clclass)
 
-#CLASSE 1: SUOLO NUDO 
-#CLASSE 2: VEGETAZIONE PRESENTE 
+#CLASSE 1: (GIALLO) SUOLO NUDO 
+#CLASSE 2: (VEGETAZIONE) VEGETAZIONE PRESENTE 
 
 #Calcoliamo le frequenze
 freq_22 <- freq(Dadia_22_class)
@@ -267,8 +264,8 @@ perc_22
 
 
 #Ripetiamo questa operazione di classificazione anche per gli altri anni 
-#2023 pre incendio#
 
+#2023 pre incendio#
 #Estrazione dei valori
 single_nr_pre <- getValues(Dadia_pre)
 
@@ -283,9 +280,12 @@ freq_pre <- freq(Dadia_pre_class)
 perc_pre <- freq_pre * 100 / total
 perc_pre
 
+#Nel 2023 pre incendio avremo 
+#SUOLO NUDO: 35%
+#VEGETAZIONE: 65 %
+
 
 #2023 post incendio#
-
 #Estrazione dei valori
 single_nr_post <- getValues(Dadia_post)
 
@@ -300,24 +300,35 @@ freq_post <- freq(Dadia_post_class)
 perc_post <- freq_post * 100 / total
 perc_post
 
+#Nel 2023 post incendio è stata aggiunta una classe, ovvero quella dell'area bruciata 
+#SUOLO NUDO: 33%
+#SUOLO BRUCIATO: 30%
+#VEGETAZIONE: 36%
+
 #Plottiamo le tre immagini affiancate 
 #Alla terza immagine post incendio è stata aggiunta una classe (ovvero quella dell'area bruciata )
 #Dunque è necessario modificare l'ordine di colori della palette per permettere una perfetta conincidenza 
 #con le immagini precedenti 
-clclass3 <- colorRampPalette(c("darkred", "darkorchid4", "yellow4")) (100)
 
-par(mfrow=c(1,2))
-plotRGB(Dadia_post, 3,2,1, stretch="lin")
-plot(Dadia_post_class, col=clclass3, main ="Classificazione post incendio")
+
+#Carichiamo una palette con 2 colori per distinguere aree verdi da suolo nudo 
+clclass <- colorRampPalette(c("yellow4", "darkred")) (100)
+clclass2 <- colorRampPalette(c("darkred", "yellow4")) (100)
+clclass3 <- colorRampPalette(c("darkorchid4", "yellow4", "darkred")) (100)
+
 
 par(mfrow=c(1,3))
-plot(Dadia_22_class, col=clclass, main = "Classificazione 2022")
-plot(Dadia_pre_class, col=clclass, main ="Classificazione pre incendio")
-plot(Dadia_post_class, col=clclass3, main ="Classificazione post incendio")
+plot(Dadia_22_class, col=clclass, main = "2022")
+plot(Dadia_pre_class, col=clclass2, main ="Pre Incendio")
+plot(Dadia_post_class, col=clclass3, main ="Post Incendio")
 
 #Le aree gialle rappresentano la porzione di suolo nudo
 #Le aree rosse indicano la porzione con vegetazione 
 #Le aree viola indicano il territorio colpito dall'incendio
+
+#Esportiamo l'immagine 
+pdf("Classificazione.pdf")
+dev.off()
 
 #Creiamo dunque un grafico con le percentuali ottenute per mostrare la percentuale di copertura del suolo per i diversi anni
 #Iniziamo dal 2023
@@ -332,17 +343,17 @@ percentages
 
 #Creiamo un grafico a barre con i valori del 2022
 Percent_22_g <- ggplot(percentages, aes(x=cover, y=percent_22, fill=cover)) + geom_bar(position = "stack", stat = "identity")+
-  labs(title = "Percentuale di Copertura del Suolo per l'Anno 2022",
-       x = "Copertura suolo", y = "Percentuale") + geom_text(aes(label =paste(round(percent22,2), "%"), vjust = -0.5)) + ylim(c(0,100))
+  labs(title = "Percentuale copertura suolo2022",
+       x = "Copertura suolo", y = "Percentuale") + geom_text(aes(label =paste(round(percent_22,2), "%"), vjust = -0.5)) + ylim(c(0,100))
 
 #2023 pre incendio
 Percent_pre_g <- ggplot(percentages, aes(x=cover, y=percent_pre, fill=cover)) + geom_bar(position = "stack", stat = "identity")+
-  labs(title = "Percentuale di Copertura del Suolo nel 2023 (pre incendio)",
+  labs(title = "Percentuale copertura suolo 2023",
        x = "Copertura suolo", y = "Percentuale") + geom_text(aes(label =paste(round(percent_pre,2), "%"), vjust = -0.5))+ ylim(c(0,100))
 
 #2023 post incendio
 Percent_post_g<- ggplot(percentages, aes(x=cover, y=percent_post, fill=cover)) + geom_bar(position = "stack", stat = "identity")+
-  labs(title = "Percentuale di Copertura del Suolo nel 2023 (post incendio)",
+  labs(title = "Percentuale copertura suolo post incendio",
        x = "Copertura suolo", y = "Percentuale") + geom_text(aes(label =paste(round(percent_post,2), "%"), vjust = -0.5)) + ylim(c(0,100))
 
 #Andiamo ad affiancare i tre grafici creati grazie alla libreria "patchwork"
