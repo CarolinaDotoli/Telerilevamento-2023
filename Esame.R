@@ -363,3 +363,31 @@ Percent_22_g + Percent_pre_g + Percent_post_g
 pdf(Grafico_coperturasuolo.pdf)
 dev.off()
 
+
+
+#4. CALCOLO INDICE NBR
+#L'indice NBR (Normalized burned ratio) è un indice spettrale utilizzato per individuare le aree bruciate 
+#Si basa sulla differenza tra le bande del vicino infrarosso (NIR) e quello del medio infrarosso (SWIR)
+# NBR = (B08 - B12) / (B08 + B12)
+Dadia_post
+NBR <- (Dadia_post[[6]] - Dadia_post[[5]]) / (Dadia_post[[6]] + Dadia_post[[5]])
+
+#Creiamo una palette di colori
+color <- colorRampPalette(c("black", "darkorange3", "white", "blueviolet")) (100)
+
+#Plottiamo la NBR
+plot(NBR, col=color, main="NBR dopo l'incendio") 
+
+
+#Esportiamo il grafico 
+pdf("NBR.pdf")
+dev.off()
+
+#Compariamo l'immagine della NDVI con quella della NBR
+par(mfrow=c(1,2))
+plot(NDVIpost, col=color, main="NDVI")
+plot(NBR, col=color, main ="NBR")
+
+#Esportiamo il grafico 
+pdf("NDVI_NBR.pdf")
+dev.off()
