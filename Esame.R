@@ -128,7 +128,7 @@ dev.off()
 #dell'incendio; sulla banda del verde invece è posto l'infrarosso vicino (NIR), per poter determinare la presenza
 #di piante 
 
-par(mfrow=c(1,3))
+par(mfrow=c(1,3),oma = c(2, 0, 0, 2))
 plotRGB(Dadia_22, 6,7, 4, stretch="lin")
 plotRGB(Dadia_pre, 6,7, 4, stretch="lin")
 plotRGB(Dadia_post, 5,6, 3, stretch="lin")
