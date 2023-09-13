@@ -211,13 +211,19 @@ difNDVI_tot <- NDVI22 - NDVIpost
 #Creiamo una palette di colori per visualizzare la differenza di NDVI
 cldiff <- colorRampPalette(c("seagreen4", "mediumseagreen", "white", "lightpink", "deeppink3")) (100)
 
-#Compariamo le immagini della differenza tra il 2022 e il 2023 ed i danni subiti dall'incendio
-par(mfrow=c(1,2))
+#Plottiamo la DVI
+#Differenza tra 2022 e 2023
 plot(difNDVI_norm, col=cldiff, main ="Differenza NDVI tra il 2022 e 2023")
+
+#Esportiamo l'immagine 
+pdf("Differenza NDVI.pdf")
+dev.off()
+
+#Differenza NDVI pre e post incendio
 plot(difNDVI_incendio, col=cldiff, main = "Differenza di NDVI dovuta all'incendio")
 
 #Esportiamo l'immagine 
-pdf("Differenza_NDVI")
+pdf("Differenza NDVI prepost.pdf")
 dev.off ()
 
 #Mostriamo ora l'immagine della differenza totale, ovvero dal 2022 alla situazione post incendio
@@ -227,7 +233,9 @@ plot(difNDVI_tot, col=cldiff, main = "Differenza totale NDVI tra il 2022 e 2023 
 #Le aree bianche indicano assenza di variazione della NDVI 
 #Le aree rosa indicano una diminuzione della componente vegetale
 
-
+#Esportiamo l'immagine 
+pdf("DVI_tot.pdf")
+dev.off()
 
 #3. CLASSIFICAZIONE 
 # Analizziamo la percentuale di copertura vegetale nel corso del tempo 
