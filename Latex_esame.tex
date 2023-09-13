@@ -1,0 +1,211 @@
+\documentclass{beamer}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{xcolor} 
+\usepackage{enumitem} %aumentare gli spazi tra le parole
+\usepackage{float}
+
+\title{Monitoraggio geo-ecologico del Parco Nazionale di Dadia-Lefkimi-Soufli}
+\subtitle{\textit{analisi dei danni causati dall'incendio del 2023}}
+\author{Maria Carolina Dotoli}
+\institute{Alma Mater Studiorum - Università di Bologna}
+\date{2023}
+
+\usetheme{Malmoe}
+\usecolortheme{beaver}
+
+\begin{document}
+\maketitle
+
+
+\begin{frame}
+\frametitle{\textbf{Area studio}}
+\begin{figure}
+    \centering
+    \includegraphics[width= 0.8\textwidth, height =0.8\textheight ]{Screenshot (201).png}
+\end{figure}
+ \end{frame}
+ \section{Scopo del progetto}
+
+\begin{frame}{Obiettivo}
+    Analizzare la perdita di vegetazione causata dall'incendio dell'Agosto del 2023, che ha causato la perdita di oltre \textbf{810.000 ettari} diventando il più grande incendio mai registrato nell'Unione Europea.
+    \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth, height =0.5\textheight]{Dadia.jpg}
+    \end{figure}
+\end{frame}
+
+\section{Materiali e Metodi}
+
+\begin{frame}{Materiali}
+Utilizzo di immagini satellitari acquisite dal satellite \textit{Sentinel-2}
+\begin{itemize}[topsep=22pt]
+    \item \textbf{\textcolor{blue}{B02:}} (BLU) 0.450-0.515 $\mu$m\
+    \item \textbf{\textcolor{green}{B03:}} (VERDE) 0.525-0.600 $\mu$m\
+    \item \textbf{\textcolor{red}{B04:}} (ROSSO) 0.630-0.680 $\mu$m\
+    \item \textbf{\textcolor{purple}{B08a:}} (NIR) 0.845-0.885 $\mu$m\
+    \item \textbf{\textcolor{orange}{B12:}} (SWIR2)  0,7-2,5 $\mu$m\
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Metodi}
+    \begin{itemize}
+        \item Importazione immagini e visualizzazione
+        \item \pause Calcolo DVI e NDVI
+        \item  \pause Classificazione e calcolo percentuali della copertura del suolo 
+         \item \pause Calcolo BMR e comparazione con NDVI
+        
+    \end{itemize}
+
+\end{frame}
+
+\section{Analisi (codice e osservazioni)}
+
+\subsection{Importazione e visualizzazione immagini}
+
+
+\begin{frame}{Codice - Visualizzazione in RGB colori naturali e NIR}
+\includegraphics[width=0.7\textwidth]{Codice/RGB2022_r.png}
+\centering
+\includegraphics[width=0.7 \textwidth]{Codice/RGBpre_r.png}
+\centering
+\includegraphics[width=0.7 \textwidth]{Codice/RGBpost_r.png}
+\centering
+\end{frame}
+
+
+\begin{frame}{Visualizzazione immagini 2022}
+\includegraphics[width = \textwidth]{Dadia_22.pdf}
+\caption{\textit{Colori naturali} (sinistra), \textit{NIR} (destra)}
+\centering  
+\end{frame}
+
+
+
+\begin{frame}{Visualizzazione immagini (2023 pre-incendio)}
+ \includegraphics[width= \textwidth]{Immagini/Dadia_pre.pdf}
+ \caption{\textit{Colori naturali} (sinistra), \textit{NIR} (destra)}
+ \centering
+ 
+\end{frame}
+
+\begin{frame}{Visualizzazione immagini (2023 post-incendio)}
+ \includegraphics[width=\textwidth]{Immagini/Dadia_post.pdf}
+ \caption{\textit{Colori naturali} (sinistra), \textit{NIR} (destra)}
+ \centering
+\end{frame}
+
+\begin{frame}{Codice SWIR}
+\includegraphics[width=0.7\textwidth]{Codice/SWIR_r.png}
+\centering
+\begin{itemize}
+    \item Lo \textit{short-wawe infrared} (\textbf{SWIR2}) può essere utile per evidenziare i danni causati da un incendio, poichè i terreni bruciati si riflettono fortemente nelle bande SWIR2
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Visualizzazione SWIR}
+ \includegraphics[width=\textwidth, height= \textheight]{Immagini/Dadia_SWIR.pdf}
+    \centering
+    \end{frame}
+
+\subsection{Analisi DVI e NDVI}
+
+
+\begin{frame}{Formula DVI}
+\begin{equation}
+    DVI = NIR - RED
+    \centering
+    \end{equation}
+\end{frame}
+
+\begin{frame}{Codice DVI}
+\includegraphics[width=\textwidth]{DVI_r.png}
+    \begin{itemize}
+\item Questo indice permette di distinguere tra suolo e vegetazione in quanto la riflettanza del suolo nella banda del \textbf{NIR} è molto minore rispetto alla vegetazione.
+\end{itemize}    
+\end{frame}
+
+\begin{frame}{Visualizzazione DVI}
+    \includegraphics[width= \textwidth]{DVI.pdf}
+\end{frame}
+
+
+\begin{frame}{Formula NDVI}
+\begin{equation}
+    NDVI = \frac{NIR - RED}{NIR + RED} 
+\end{equation}
+\end{frame}
+
+\begin{frame}{Codice NDVI}
+\includegraphics[width=0.8\textwidth]{NDVI_r.png}
+\centering
+    \begin{itemize}
+\item Questo indice consiste nella forma normalizzata della DVI con valori che variano da -1 a 1 per permettere un confronto tra le diverse immagini
+\end{itemize}   
+    \end{frame}
+
+\begin{frame}{Visualizzazione NDVI}
+    \includegraphics[width=\textwidth]{Immagini/NDVI.pdf}
+\end{frame}
+
+\begin{frame}{Differenza NDVI 22-23}
+\includegraphics[width=0.90\textwidth, height=\textheight]{Immagini/Differenza NDVI.pdf}
+\centering
+    \end{frame}
+
+\begin{frame}{Differenza NDVI pre-post incendio}
+    \includegraphics[width=0.90\textwidth, height=\textheight]{Immagini/Differenza NDVI prepost.pdf}
+    \centering
+\end{frame}
+
+\begin{frame}{Differenza NDVI totale}
+\includegraphics[width=0.9\textwidth, height=\textheight]{Immagini/Differenza NDVI tot.pdf}
+\centering
+    \end{frame}
+    
+\subsection{NBR}
+\begin{frame}{NBR}
+Il \textit{Normalized Burn Ratio} (\textbf{NBR}) è un indice basato sull'analisi delle bande spettrali del NIR e SWIR2 per valutare l'entità dei danni causati da incendi    
+\end{frame}
+
+\begin{frame}{NBR- Formula}
+\begin{equation}
+    NBR = \frac{NIR - SWIR2}{NIR + SWIR2} 
+\end{equation}
+\end{frame}
+
+\begin{frame}{NBR - Codice}
+\includegraphics[width=\textwidth]{Codice/NBR_r.png}
+\end{frame}
+
+\begin{frame}{Visualizzazione NBR}
+    \includegraphics[width=\textwidth, height=\textheight]{Immagini/NBR.pdf}
+\end{frame}
+
+\begin{frame}{Confronto NDVI e NBR}
+    \includegraphics[width=\textwidth]{Immagini/NDVI_NBR.pdf}
+\end{frame}
+    
+\subsection{Classificazione}
+\begin{frame}{Codice - Classificazione}
+\includegraphics[width=\textwidth]{Codice/Classificazione_r.png}
+\includegraphics[width=\textwidth]{Immagini/Percentuale_r.png}
+\centering  
+\end{frame}
+
+\begin{frame}{Visualizzazione - Classificazione}
+\includegraphics[width=\textwidth]{Immagini/Classificazione.pdf}
+    \end{frame}
+
+\begin{frame}{Grafici copertura suolo}
+\includegraphics[width=\textwidth]{Immagini/Grafico_coperturasuolo.pdf}
+\end{frame}
+
+\section{conclusione}
+\begin{frame}{Discussione}
+    \begin{itemize}
+        \item Possiamo quindi concludere che dall'anno 2022 all'anno 2023 c'è stato un lieve incremento nella vegetazione, che possiamo considerare come una minima ripresa dagli incendi che hanno interessato l'area nel 2022.
+        \item Tuttavia i danni causati dall'incendio del 26 Agosto 2023 sono stati molto più ingenti di quelli passati, causando la perdita di circa il 50% della copertura forestale dell'area del Parco.
+        \item Pertanto si presuma che sia necessario un periodo di diversi anni che assicuri il ripristino della vegetazione allo stato iniziale. 
+    \end{itemize}
+\end{frame}
