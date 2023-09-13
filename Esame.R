@@ -40,7 +40,7 @@ Dadia_22
 #BANDA 7: NIR
 
 #Plottiamo con colori naturali e NIR 
-par(mfrow=c(1,2))
+par(mfrow=c(1,2), oma= c(3, 3, 2, 2))
 plotRGB(Dadia_22, 4,3,2, stretch="lin")
 plotRGB(Dadia_22, 7,3,2, stretch="lin" )
 
@@ -75,7 +75,7 @@ Dadia_pre
 #BANDA 7: NIR
 
 #Plottiamo con colori naturali e falsi colori
-par(mfrow=c(1,2))
+par(mfrow=c(1,2), oma= c(3, 3, 2, 2))
 plotRGB(Dadia_pre, 4,3,2, stretch="lin")
 plotRGB(Dadia_pre, 7,3,2, stretch="lin" )
 
@@ -113,7 +113,7 @@ Dadia_post
 
 #Plottiamo con colori naturali e falsi colori
 #N.B: Qui manca il livello 1, quindi le bande sono sfalsate 
-par(mfrow=c(1,2))
+par(mfrow=c(1,2), oma= c(3, 3, 2, 2))
 plotRGB(Dadia_post, 3,2,1, stretch="lin")
 plotRGB(Dadia_post, 6,2,1, stretch="lin" )
 
