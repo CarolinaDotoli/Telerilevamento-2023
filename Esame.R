@@ -155,11 +155,29 @@ DVIpost <- Dadia_post[[6]] - Dadia_post[[3]] #Manca la banda 1 quindi i colori s
 #Creiamo una palette di colori per visualizzare la DVI
 clDVI <- colorRampPalette(c("blue4", "aquamarine3", "antiquewhite", "darkred")) (100)
 
-#Plottiamo le immagini della DVI
-par(mfrow=c(1,3))
+#Plottiamo la DVI per il 2022
+par(oma = c(1, 1, 2, 2))
 plot(DVI22, col=clDVI, main="DVI nel 2022")
+
+#Esportiamo
+pdf("DVI_22.pdf")
+dev.off()
+
+#Ripetiamo il plot per il 2023 pre incendio 
+par(oma = c(1, 1, 2, 2))
 plot(DVIpre, col=clDVI, main="DVI nel 2023 (pre incendio)")
+
+#Esportiamo
+pdf("DVI_preincendio.pdf") 
+dev.off()
+
+#Plottiamo la DVI per il 2023 post incendio
+par(oma = c(1, 1, 2, 2))
 plot(DVIpost, col=clDVI, main="DVI nel 2023 (post incendio)")
+
+#Esportiamo 
+pdf("DVI_postincendio.pdf")
+dev.off()
 
 #Blu: vegetazione assente 
 #Azzurro: vegetazione scarsa 
@@ -267,8 +285,8 @@ perc_22 <- freq_22 * 100 / total
 perc_22
 
 #Nel 2022 abbiamo quindi: 
-#Suolo nudo: 36%
-#Vegetazione: 64%
+#Suolo nudo: 39%
+#Vegetazione: 61%
 
 
 #Ripetiamo questa operazione di classificazione anche per gli altri anni 
@@ -320,14 +338,13 @@ perc_post
 
 
 #Carichiamo una palette con 2 colori per distinguere aree verdi da suolo nudo 
-clclass <- colorRampPalette(c("yellow4", "darkred")) (100)
-clclass2 <- colorRampPalette(c("darkred", "yellow4")) (100)
-clclass3 <- colorRampPalette(c("darkorchid4", "yellow4", "darkred")) (100)
+clclass <- colorRampPalette(c("yellow4", "darkred")) (2)
+clclass3 <- colorRampPalette(c("darkred", "darkorchid","yellow4")) (3)
 
 
 par(mfrow=c(1,3))
 plot(Dadia_22_class, col=clclass, main = "2022")
-plot(Dadia_pre_class, col=clclass2, main ="Pre Incendio")
+plot(Dadia_pre_class, col=clclass, main ="Pre Incendio")
 plot(Dadia_post_class, col=clclass3, main ="Post Incendio")
 
 #Le aree gialle rappresentano la porzione di suolo nudo
@@ -342,7 +359,7 @@ dev.off()
 #Iniziamo dal 2023
 #Creiamo un data frame con le informazioni che ci interessano 
 cover <- c("Suolo nudo", "Vegetazione", "Terreno bruciato")
-percent_22 <- c(35.91, 64.09, 00)
+percent_22 <- c(39.10, 60.90, 00)
 percent_pre <- c(35.19, 64.81, 00)
 percent_post <- c(30.95, 36.09, 32.96)
 
